@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>嘉義市天文協會合作巡天計畫發現成果記錄｜小行星臨時編號解碼與觀測儀表板</title>
+  <meta name="description" content="嘉義市天文協會合作巡天計畫發現成果記錄：收錄 14 顆小行星觀測成果（含 PHA 與 Apollo 型近地小行星），整合 IAU / MPC 小行星臨時編號雙向解碼器與互動式編號規則圖鑑。" />
+
+  <!-- Google Fonts: Outfit (幾何天文標題) + Noto Sans TC (繁體中文) + JetBrains Mono (等寬編號與公式) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700;900&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- 深空動態星空畫布與氛圍光暈 -->
+  <canvas id="starfieldCanvas" class="starfield-canvas" aria-hidden="true"></canvas>
+  <div class="nebula-backdrop" aria-hidden="true">
+    <div class="nebula-orb nebula-orb--cyan"></div>
+    <div class="nebula-orb nebula-orb--violet"></div>
+    <div class="nebula-orb nebula-orb--amber"></div>
+  </div>
+
+  <!-- 頂部玻璃導覽列 -->
+  <header class="top-nav">
+    <div class="container top-nav__inner">
+      <a href="#top" class="brand" aria-label="回到頂部">
+        <span class="brand__emblem" aria-hidden="true">
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="18" cy="18" rx="15" ry="6.5" transform="rotate(-26 18 18)" stroke="url(#orbGrad)" stroke-width="1.5" stroke-dasharray="3 2.5"/>
+            <circle cx="18" cy="18" r="5.2" fill="url(#coreGrad)"/>
+            <circle cx="29.2" cy="12.5" r="2.4" fill="#FBBF24"/>
+            <defs>
+              <linearGradient id="orbGrad" x1="3" y1="18" x2="33" y2="18" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#38BDF8"/>
+                <stop offset="1" stop-color="#A78BFA"/>
+              </linearGradient>
+              <radialGradient id="coreGrad" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(16.5 16.5) rotate(45) scale(8)">
+                <stop stop-color="#E0F2FE"/>
+                <stop offset="0.5" stop-color="#38BDF8"/>
+                <stop offset="1" stop-color="#1E3A8A"/>
+              </radialGradient>
+            </defs>
+          </svg>
+        </span>
+        <span class="brand__text">
+          <span class="brand__title">嘉義市天文協會</span>
+          <span class="brand__sub">合作巡天計畫發現成果記錄</span>
+        </span>
+      </a>
+
+      <nav class="nav-links" aria-label="主要區塊導覽">
+        <a href="#decoder" class="nav-link">雙向解碼器</a>
+        <a href="#dashboard" class="nav-link">巡天發現成果</a>
+        <a href="#guide" class="nav-link">編號規則圖鑑</a>
+      </nav>
+
+      <div class="nav-telemetry" title="已載入嘉義市天文協會合作巡天計畫 14 顆小行星精確觀測日（UT）">
+        <span class="telemetry-dot"></span>
+        <span id="navDataStatus">14 顆發現 · UT 同步</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero 導覽視覺區 -->
+    <section class="hero">
+      <div class="container hero__grid">
+        <div class="hero__copy">
+          <div class="eyebrow">
+            <span class="eyebrow__tag">CHIAYI ASTRONOMICAL ASSOCIATION</span>
+            <span class="eyebrow__sep"></span>
+            <span>IAU / MPC 合作巡天觀測檔案</span>
+          </div>
+          <h1 class="hero__title">
+            嘉義市天文協會<br />
+            <span class="hero__title-accent">合作巡天計畫發現成果記錄</span>
+          </h1>
+          <p class="hero__desc">
+            完整記錄嘉義市天文協會參與合作巡天計畫所發現的 14 顆小行星觀測軌跡（包含潛在威脅近地小行星 <strong>2026 RF10</strong> 與阿波羅型近地小行星 <strong>2026 VQ20</strong>）。結合 IAU / MPC 臨時編號雙向解碼器與互動規則圖鑑，一次掌握每顆小行星的發現時窗、順位與官方資料庫查詢。
+          </p>
+          <div class="hero__actions">
+            <a href="#dashboard" class="btn btn--primary">
+              <span>瀏覽 14 顆發現成果</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#decoder" class="btn btn--glass">
+              <span>小行星編號雙向解碼</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 裝飾性星軌儀表圖 -->
+        <div class="hero__visual" aria-hidden="true">
+          <div class="orbital-radar">
+            <svg viewBox="0 0 360 360" fill="none" xmlns="http://www.w3.org/2000/svg" class="orbital-radar__svg">
+              <circle cx="180" cy="180" r="158" stroke="rgba(148,163,200,0.14)" stroke-dasharray="4 6"/>
+              <circle cx="180" cy="180" r="118" stroke="rgba(56,189,248,0.22)"/>
+              <circle cx="180" cy="180" r="74" stroke="rgba(167,139,250,0.24)" stroke-dasharray="2 5"/>
+              <line x1="180" y1="12" x2="180" y2="348" stroke="rgba(148,163,200,0.08)"/>
+              <line x1="12" y1="180" x2="348" y2="180" stroke="rgba(148,163,200,0.08)"/>
+              <!-- 橢圓軌道 -->
+              <ellipse cx="180" cy="180" rx="142" ry="62" transform="rotate(-28 180 180)" stroke="url(#orbitPath1)" stroke-width="1.6"/>
+              <ellipse cx="180" cy="180" rx="106" ry="132" transform="rotate(24 180 180)" stroke="url(#orbitPath2)" stroke-width="1.3" stroke-dasharray="5 4"/>
+              <!-- 中心太陽微光 -->
+              <circle cx="180" cy="180" r="18" fill="url(#sunGlow)"/>
+              <circle cx="180" cy="180" r="6" fill="#FEF3C7"/>
+              <!-- 標記點：PHA 與 APOLLOA -->
+              <g class="orbit-node orbit-node--pha">
+                <circle cx="292" cy="122" r="14" fill="rgba(255,77,109,0.18)"/>
+                <circle cx="292" cy="122" r="5" fill="#FF4D6D"/>
+              </g>
+              <g class="orbit-node orbit-node--apollo">
+                <circle cx="96" cy="242" r="13" fill="rgba(251,191,36,0.2)"/>
+                <circle cx="96" cy="242" r="4.5" fill="#FBBF24"/>
+              </g>
+              <circle cx="128" cy="82" r="3.2" fill="#38BDF8"/>
+              <circle cx="248" cy="264" r="3" fill="#34D399"/>
+              <defs>
+                <linearGradient id="orbitPath1" x1="40" y1="180" x2="320" y2="180" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#38BDF8" stop-opacity="0.15"/>
+                  <stop offset="0.5" stop-color="#FF4D6D" stop-opacity="0.85"/>
+                  <stop offset="1" stop-color="#38BDF8" stop-opacity="0.15"/>
+                </linearGradient>
+                <linearGradient id="orbitPath2" x1="74" y1="48" x2="286" y2="312" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#FBBF24" stop-opacity="0.75"/>
+                  <stop offset="1" stop-color="#A78BFA" stop-opacity="0.25"/>
+                </linearGradient>
+                <radialGradient id="sunGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(180 180) scale(20)">
+                  <stop stop-color="#FDE68A" stop-opacity="0.9"/>
+                  <stop offset="1" stop-color="#F59E0B" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+            </svg>
+            <div class="radar-chip radar-chip--pha">
+              <span class="radar-chip__dot"></span>
+              <span>2026 RF10 · PHA</span>
+            </div>
+            <div class="radar-chip radar-chip--apollo">
+              <span class="radar-chip__dot"></span>
+              <span>2026 VQ20 · APOLLOA</span>
+            </div>
+            <div class="radar-chip radar-chip--count">
+              <span class="mono">14</span> OBJECTS TRACKED
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 模組 1：互動式小行星臨時編號解碼器（雙向解析）                -->
+    <!-- ============================================================ -->
+    <section id="decoder" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-head__meta">MODULE 01 · BIDIRECTIONAL PARSER</div>
+          <h2 class="section-head__title">互動式小行星臨時編號解碼器</h2>
+          <p class="section-head__sub">輸入「標準臨時編號」或「MPC 7 碼壓縮格式」，系統即時自動辨識格式、以彩色區塊拆解並進行雙向互轉。</p>
+        </div>
+
+        <div class="glass-panel decoder-shell">
+          <!-- 輸入列 -->
+          <div class="decoder-input-wrap">
+            <label for="designationInput" class="sr-only">輸入小行星臨時編號或 MPC 7 碼壓縮編號</label>
+            <div class="decoder-input-box" id="decoderInputBox">
+              <span class="decoder-input-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="7"/>
+                  <path d="M21 21l-4.35-4.35"/>
+                </svg>
+              </span>
+              <input
+                id="designationInput"
+                type="text"
+                class="decoder-input mono"
+                value="2026 RF10"
+                placeholder="輸入如 2026 RF10、2026 TW127、K26R10F、K26TC7W..."
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <span id="detectedFormatBadge" class="format-badge format-badge--standard">偵測：標準格式</span>
+              <button type="button" id="swapFormatBtn" class="icon-btn" title="切換為對應的另一種格式">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/>
+                </svg>
+                <span>互轉代入</span>
+              </button>
+              <button type="button" id="clearInputBtn" class="icon-btn icon-btn--ghost" title="清除輸入" aria-label="清除輸入">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- 快速範例按鈕 -->
+            <div class="sample-bar">
+              <span class="sample-bar__label">快速範例：</span>
+              <div class="sample-bar__chips" id="sampleChips">
+                <button type="button" class="sample-chip sample-chip--pha" data-sample="2026 RF10">
+                  <span class="mono">2026 RF10</span>
+                  <small>PHA 潛在威脅</small>
+                </button>
+                <button type="button" class="sample-chip" data-sample="K26TC7W">
+                  <span class="mono">K26TC7W</span>
+                  <small>壓縮破百循環</small>
+                </button>
+                <button type="button" class="sample-chip sample-chip--apollo" data-sample="2026 VQ20">
+                  <span class="mono">2026 VQ20</span>
+                  <small>APOLLOA</small>
+                </button>
+                <button type="button" class="sample-chip" data-sample="K26TG1V">
+                  <span class="mono">K26TG1V</span>
+                  <small>第 4,046 顆</small>
+                </button>
+                <button type="button" class="sample-chip" data-sample="2025 WO11">
+                  <span class="mono">2025 WO11</span>
+                  <small>巡天首發</small>
+                </button>
+                <button type="button" class="sample-chip" data-sample="2026 AA">
+                  <span class="mono">2026 AA</span>
+                  <small>第 0 輪首顆</small>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 錯誤提示容器 -->
+          <div id="decoderError" class="decoder-error" role="alert" hidden></div>
+
+          <!-- 解析結果呈現區 -->
+          <div id="decoderResult" class="decoder-result">
+            <!-- 若匹配協會 14 顆發現之一，顯示專屬認證橫幅 -->
+            <div id="associationMatchBanner" class="match-banner" hidden></div>
+
+            <!-- 彩色區塊拆解視覺條（同時展示標準與壓縮格式對應） -->
+            <div class="anatomy-stage">
+              <div class="anatomy-col">
+                <div class="anatomy-col__head">
+                  <span class="anatomy-col__title">標準臨時編號拆解</span>
+                  <button type="button" class="copy-mini-btn" id="copyStandardBtn" data-copy="">複製標準編號</button>
+                </div>
+                <div class="token-row" id="standardTokens"></div>
+              </div>
+
+              <div class="anatomy-bridge" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 9h14l-4-4M19 15H5l4 4"/>
+                </svg>
+              </div>
+
+              <div class="anatomy-col">
+                <div class="anatomy-col__head">
+                  <span class="anatomy-col__title">MPC 7 碼壓縮格式拆解</span>
+                  <button type="button" class="copy-mini-btn" id="copyPackedBtn" data-copy="">複製壓縮編號</button>
+                </div>
+                <div class="token-row token-row--packed" id="packedTokens"></div>
+              </div>
+            </div>
+
+            <!-- 彩色色塊圖例 -->
+            <div class="token-legend" aria-label="色塊意義圖例">
+              <span class="legend-item legend-item--year"><i class="legend-swatch"></i>發現年份／世紀碼</span>
+              <span class="legend-item legend-item--half"><i class="legend-swatch"></i>半月區間字母（A–Y）</span>
+              <span class="legend-item legend-item--second"><i class="legend-swatch"></i>第二字母序位（A–Z）</span>
+              <span class="legend-item legend-item--cycle"><i class="legend-swatch"></i>循環次數（每輪 25 顆）</span>
+            </div>
+
+            <!-- 四張核心解碼卡片 -->
+            <div class="decode-cards">
+              <!-- 1. 發現年份 -->
+              <article class="decode-card decode-card--year">
+                <div class="decode-card__label">01 · 發現年份（西元）</div>
+                <div class="decode-card__value mono" id="resYear">2026</div>
+                <div class="decode-card__sub" id="resYearDetail">世紀代碼 K（2000 年代）＋ 末兩碼 26</div>
+              </article>
+
+              <!-- 2. 半月區間 -->
+              <article class="decode-card decode-card--half">
+                <div class="decode-card__label">02 · 發現半月區間</div>
+                <div class="decode-card__value" id="resHalfLabel">9 月上半月</div>
+                <div class="decode-card__sub mono" id="resHalfRange">2026-09-01 ～ 09-15</div>
+                <div class="decode-card__hint" id="resHalfHint">半月字母 R</div>
+              </article>
+
+              <!-- 3. 發現順位與計算過程 -->
+              <article class="decode-card decode-card--order">
+                <div class="decode-card__label">03 · 該半月內發現順位</div>
+                <div class="decode-card__value">
+                  第 <span class="mono" id="resOrder">256</span> 顆
+                </div>
+                <div class="formula-box">
+                  <div class="formula-box__eq mono" id="resFormula">(10 × 25) + 6 = 256</div>
+                  <div class="formula-box__desc" id="resFormulaDetail">循環 10 次 × 每輪 25 顆 + 字母 F（第 6 位）</div>
+                </div>
+              </article>
+
+              <!-- 4. 雙向互轉與官方直連 -->
+              <article class="decode-card decode-card--convert">
+                <div class="decode-card__label">04 · 標準 ↔ MPC 壓縮互轉</div>
+                <div class="convert-pair">
+                  <div class="convert-item">
+                    <span class="convert-item__tag">標準</span>
+                    <code class="convert-item__code mono" id="resStandard">2026 RF10</code>
+                  </div>
+                  <div class="convert-item">
+                    <span class="convert-item__tag">壓縮</span>
+                    <code class="convert-item__code mono" id="resPacked">K26R10F</code>
+                  </div>
+                </div>
+                <div class="decode-card__hint" id="resPackedCycleNote">循環 10 次未滿 100，直接補零表示為「10」</div>
+                <div class="decode-card__links">
+                  <a id="resMpcLink" href="#" target="_blank" rel="noopener noreferrer" class="ext-chip">
+                    MPC 查詢 ↗
+                  </a>
+                  <a id="resJplLink" href="#" target="_blank" rel="noopener noreferrer" class="ext-chip">
+                    NASA JPL SBDB ↗
+                  </a>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 模組 2：嘉義市天文協會合作巡天計畫 14 顆發現成果儀表板         -->
+    <!-- ============================================================ -->
+    <section id="dashboard" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-head__meta">MODULE 02 · CHIAYI SKY SURVEY DISCOVERY ARCHIVE</div>
+          <h2 class="section-head__title">嘉義市天文協會合作巡天計畫 14 顆發現成果</h2>
+          <p class="section-head__sub">整合 2025–2026 年合作巡天計畫之小行星發現紀錄與精確 UT 觀測日期，點擊卡片或快捷按鈕即可檢視完整編號拆解並直連 MPC 與 NASA JPL 資料庫。</p>
+        </div>
+
+        <!-- KPI 統計卡片 -->
+        <div class="kpi-grid">
+          <div class="glass-panel kpi-card">
+            <div class="kpi-card__top">
+              <span class="kpi-card__label">總發現數量</span>
+              <span class="kpi-icon kpi-icon--total" aria-hidden="true">✦</span>
+            </div>
+            <div class="kpi-card__num mono" id="kpiTotal">14</div>
+            <div class="kpi-card__foot">合作巡天計畫 2025/11 ～ 2026/11</div>
+          </div>
+
+          <div class="glass-panel kpi-card">
+            <div class="kpi-card__top">
+              <span class="kpi-card__label">主帶小行星（MBA）</span>
+              <span class="kpi-icon kpi-icon--mba" aria-hidden="true">◉</span>
+            </div>
+            <div class="kpi-card__num mono" id="kpiMba">12</div>
+            <div class="kpi-card__foot" id="kpiMbaPct">佔總發現數 85.7% · 火星與木星軌道間</div>
+          </div>
+
+          <div class="glass-panel kpi-card kpi-card--neo">
+            <div class="kpi-card__top">
+              <span class="kpi-card__label">近地小行星（NEO）</span>
+              <span class="kpi-icon kpi-icon--neo" aria-hidden="true">◈</span>
+            </div>
+            <div class="kpi-card__num mono" id="kpiNeo">2</div>
+            <div class="kpi-card__foot">
+              <span class="inline-pill inline-pill--pha">含 1 顆 PHA 潛在威脅</span>
+              <span class="inline-pill inline-pill--apollo">1 顆 APOLLOA</span>
+            </div>
+          </div>
+
+          <div class="glass-panel kpi-card kpi-card--spotlight">
+            <div class="kpi-card__top">
+              <span class="kpi-card__label">重點近地天體捷徑</span>
+              <span class="kpi-icon kpi-icon--alert" aria-hidden="true">⚡</span>
+            </div>
+            <div class="spotlight-list">
+              <button type="button" class="spotlight-btn spotlight-btn--pha" data-open-standard="2026 RF10">
+                <span class="spotlight-btn__dot"></span>
+                <span class="mono">2026 RF10</span>
+                <span class="spotlight-btn__tag">PHA</span>
+              </button>
+              <button type="button" class="spotlight-btn spotlight-btn--apollo" data-open-standard="2026 VQ20">
+                <span class="spotlight-btn__dot"></span>
+                <span class="mono">2026 VQ20</span>
+                <span class="spotlight-btn__tag">APOLLOA</span>
+              </button>
+            </div>
+            <div class="kpi-card__foot">點擊直接開啟詳細觀測報告</div>
+          </div>
+        </div>
+
+        <!-- 篩選、排序、檢視切換與 CSV 匯入工具列 -->
+        <div class="glass-panel toolbar">
+          <div class="toolbar__group" role="group" aria-label="依小行星類型篩選">
+            <button type="button" class="filter-btn is-active" data-filter="ALL">全部 <span class="badge-count" id="countAll">14</span></button>
+            <button type="button" class="filter-btn" data-filter="MBA">MBA <span class="badge-count" id="countMba">12</span></button>
+            <button type="button" class="filter-btn filter-btn--pha" data-filter="NEO(PHA)">NEO(PHA) <span class="badge-count" id="countPha">1</span></button>
+            <button type="button" class="filter-btn filter-btn--apollo" data-filter="NEO(APOLLOA)">NEO(APOLLOA) <span class="badge-count" id="countApollo">1</span></button>
+          </div>
+
+          <div class="toolbar__right">
+            <label class="sort-control">
+              <span class="sort-control__label">排序</span>
+              <select id="sortSelect" class="sort-select">
+                <option value="id">依項次（1 → 14）</option>
+                <option value="firstObsDesc">依首次觀測日（新 → 舊）</option>
+                <option value="firstObsAsc">依首次觀測日（舊 → 新）</option>
+                <option value="orderDesc">依半月發現順位（高 → 低）</option>
+                <option value="neoFirst">優先顯示 NEO 重點目標</option>
+              </select>
+            </label>
+
+            <div class="view-toggle" role="group" aria-label="切換檢視模式">
+              <button type="button" class="view-btn is-active" data-view="cards" title="卡片檢視">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                <span>卡片</span>
+              </button>
+              <button type="button" class="view-btn" data-view="timeline" title="時間軸檢視">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M5 7h5M14 12h5M5 17h5"/><circle cx="12" cy="7" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="17" r="2"/></svg>
+                <span>時間軸</span>
+              </button>
+            </div>
+
+            <label class="csv-upload-btn" title="可匯入新版 asteroids_dates.csv（支援 UTF-8 與 UTF-16）">
+              <input type="file" id="csvFileInput" accept=".csv,.tsv,.txt" hidden />
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+              <span>匯入 CSV</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="data-source-note">
+          <span class="data-source-note__dot"></span>
+          <span>資料來源：<strong id="dataSourceText">asteroids_dates.csv.txt（已自動讀取 14 顆精確 UT 觀測日）</strong></span>
+        </div>
+
+        <!-- 卡片檢視容器 -->
+        <div id="asteroidCardsGrid" class="asteroid-grid"></div>
+
+        <!-- 時間軸檢視容器 -->
+        <div id="asteroidTimeline" class="timeline" hidden></div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 模組 3：IAU / MPC 編號規則視覺化圖鑑                          -->
+    <!-- ============================================================ -->
+    <section id="guide" class="section section--guide">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-head__meta">MODULE 03 · INTERACTIVE VISUAL ATLAS</div>
+          <h2 class="section-head__title">IAU / MPC 編號規則視覺化圖鑑</h2>
+          <p class="section-head__sub">專為天文科普與推廣教學設計：滑鼠移過任一半月字母即可高亮對應月份，並檢視嘉義市天文協會合作巡天計畫在該半月的發現紀錄。</p>
+        </div>
+
+        <!-- 互動式 24 個半月對照表（A–Y） -->
+        <div class="glass-panel halfmonth-panel">
+          <div class="halfmonth-panel__head">
+            <div>
+              <h3 class="panel-title">第一個字母（A–Y）與 24 個半月互動對照表</h3>
+              <p class="panel-desc">一年分為 24 個半月，依序編配字母 A 至 Y；跳過易與數字 1 混淆的 <code class="mono">I</code>，亦不使用 <code class="mono">Z</code>。</p>
+            </div>
+            <div class="halfmonth-inspector" id="halfMonthInspector">
+              <span class="inspector-badge mono" id="inspectorLetter">R</span>
+              <div class="inspector-text">
+                <strong id="inspectorTitle">9 月上半月（9/1 ～ 9/15）</strong>
+                <span id="inspectorSub">移至下方格子探索各半月區間，點擊可帶入解碼器測試</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="months-grid" id="monthsMatrix"></div>
+
+          <div class="rule-callouts">
+            <div class="callout-pill">
+              <span class="callout-pill__code mono">略過 I</span>
+              <span>避免大寫字母 <strong>I</strong> 與數字 <strong>1</strong> 混淆，4 月下半月 <strong>H</strong> 後直接接 5 月上半月 <strong>J</strong>。</span>
+            </div>
+            <div class="callout-pill">
+              <span class="callout-pill__code mono">無 Z</span>
+              <span>一年固定 12 個月 × 2 ＝ 24 個半月，剛好用完 A–Y（扣除 I）共 24 個字母。</span>
+            </div>
+            <div class="callout-pill">
+              <span class="callout-pill__code mono">★ 巡天發現</span>
+              <span>亮點星標代表合作巡天計畫曾於該半月發現小行星（如 <strong>T</strong> 有 5 顆、<strong>V</strong> 有 4 顆）。</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 科普教學雙圖卡：標準格式 vs MPC 7 碼壓縮格式 -->
+        <div class="rules-grid">
+          <!-- 圖卡 A：標準格式規則 -->
+          <article class="glass-panel rule-card">
+            <div class="rule-card__header">
+              <span class="rule-tag rule-tag--cyan">FORMAT A</span>
+              <h3 class="panel-title">標準臨時編號格式規則</h3>
+              <p class="panel-desc">供人類閱讀、新聞發布與論文引用的標準形式，例如 <code class="mono">2026 RF10</code>。</p>
+            </div>
+
+            <div class="visual-specimen">
+              <div class="specimen-cell specimen-cell--year">
+                <span class="specimen-cell__char mono">2026</span>
+                <span class="specimen-cell__cap">發現西元年</span>
+              </div>
+              <div class="specimen-cell specimen-cell--half">
+                <span class="specimen-cell__char mono">R</span>
+                <span class="specimen-cell__cap">9 月上半月</span>
+              </div>
+              <div class="specimen-cell specimen-cell--second">
+                <span class="specimen-cell__char mono">F</span>
+                <span class="specimen-cell__cap">第 6 個字母</span>
+              </div>
+              <div class="specimen-cell specimen-cell--cycle">
+                <span class="specimen-cell__char mono">10</span>
+                <span class="specimen-cell__cap">循環 10 輪</span>
+              </div>
+            </div>
+
+            <div class="rule-steps">
+              <div class="rule-step">
+                <span class="rule-step__num mono">1</span>
+                <div>
+                  <strong>25 字母為一輪（A–Z，跳過 I）</strong>
+                  <p>同一個半月內，第 1～25 顆依序配給 A～Z（無數字）；滿 25 顆後進入第 1 輪循環，加上下標數字 <code class="mono">1</code>（如 A1 為第 26 顆），以此類推。</p>
+                </div>
+              </div>
+              <div class="rule-step">
+                <span class="rule-step__num mono">2</span>
+                <div>
+                  <strong>發現順位計算公式</strong>
+                  <div class="mini-formula mono">順位 = (循環數字 × 25) + 第二字母序位</div>
+                  <p>範例 <code class="mono">2026 RF10</code>：<code class="mono">(10 × 25) + 6 = 第 256 顆</code>。</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 25 字母序位條 -->
+            <div class="alpha-strip-wrap">
+              <div class="alpha-strip__title">第二個字母序位速查表（A=1 ～ Z=25，跳過 I）</div>
+              <div class="alpha-strip" id="secondLetterStrip"></div>
+            </div>
+          </article>
+
+          <!-- 圖卡 B：MPC 7 碼壓縮格式規則 -->
+          <article class="glass-panel rule-card">
+            <div class="rule-card__header">
+              <span class="rule-tag rule-tag--violet">FORMAT B</span>
+              <h3 class="panel-title">MPC 7 碼壓縮格式規則</h3>
+              <p class="panel-desc">國際小行星中心（MPC）資料庫定長 7 字元格式，方便電報回報與軌道運算，例如 <code class="mono">K26TC7W</code>。</p>
+            </div>
+
+            <div class="visual-specimen visual-specimen--packed">
+              <div class="specimen-cell specimen-cell--year">
+                <span class="specimen-cell__char mono">K</span>
+                <span class="specimen-cell__cap">2000年代</span>
+              </div>
+              <div class="specimen-cell specimen-cell--year">
+                <span class="specimen-cell__char mono">26</span>
+                <span class="specimen-cell__cap">年份末兩碼</span>
+              </div>
+              <div class="specimen-cell specimen-cell--half">
+                <span class="specimen-cell__char mono">T</span>
+                <span class="specimen-cell__cap">10月上半</span>
+              </div>
+              <div class="specimen-cell specimen-cell--cycle">
+                <span class="specimen-cell__char mono">C7</span>
+                <span class="specimen-cell__cap">循環 127</span>
+              </div>
+              <div class="specimen-cell specimen-cell--second">
+                <span class="specimen-cell__char mono">W</span>
+                <span class="specimen-cell__cap">第二字母</span>
+              </div>
+            </div>
+
+            <div class="compact-tables">
+              <!-- 世紀代碼表 -->
+              <div class="compact-box">
+                <div class="compact-box__title">第 1 碼：世紀代碼</div>
+                <div class="century-pills">
+                  <div class="century-pill"><span class="mono">I</span> 1800 年代</div>
+                  <div class="century-pill"><span class="mono">J</span> 1900 年代</div>
+                  <div class="century-pill century-pill--active"><span class="mono">K</span> 2000 年代</div>
+                </div>
+              </div>
+
+              <!-- 破百循環編碼表 -->
+              <div class="compact-box">
+                <div class="compact-box__title">第 5–6 碼：循環次數編碼（100 次以上以字母壓縮百十位）</div>
+                <p class="compact-box__desc">0～99 次直接補零（如 <code class="mono">00</code>、<code class="mono">08</code>、<code class="mono">10</code>）；100 次以上時，第 5 碼改用字母表示十位與百位：</p>
+                <div class="cycle-code-grid" id="cycleCodeGrid"></div>
+                <p class="compact-box__example">
+                  範例驗證：<code class="mono">K26TC7W</code> → K26 (2026) · T (10月上半) · C7 (C=12 → 127) · W ＝ <strong class="mono">2026 TW127</strong>
+                </p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <div>
+        <strong>嘉義市天文協會合作巡天計畫發現成果記錄</strong>
+        <p>依據 IAU / Minor Planet Center（MPC）Provisional Designation 官方規範建置 · 支援離線瀏覽與 CSV 觀測日匯入。</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.minorplanetcenter.net/" target="_blank" rel="noopener noreferrer">MPC 官方網站 ↗</a>
+        <a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html" target="_blank" rel="noopener noreferrer">NASA JPL SBDB ↗</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 小行星詳細資訊 Modal -->
+  <div id="asteroidModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
+    <div class="modal__backdrop" data-close-modal="true"></div>
+    <div class="modal__dialog glass-panel" id="modalDialog">
+      <button type="button" class="modal__close" id="modalCloseBtn" aria-label="關閉視窗">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <div id="modalBody" class="modal__body"></div>
+    </div>
+  </div>
+
+  <!-- 輕量提示 Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script defer src="js/decoder.js"></script>
+  <script defer src="js/data.js"></script>
+  <script defer src="js/app.js"></script>
+</body>
+</html>
