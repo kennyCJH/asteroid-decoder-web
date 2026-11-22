@@ -1543,10 +1543,28 @@ body {
   margin-top: 2px;
 }
 
+.asteroid-card__orbit-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(52, 211, 153, 0.08);
+  border: 1px solid rgba(52, 211, 153, 0.22);
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
+.asteroid-card__orbit-strip b {
+  color: #a7f3d0;
+  font-weight: 700;
+}
+
 .asteroid-card__quicklinks {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
 }
 
 .quick-ext {
@@ -1554,9 +1572,9 @@ body {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  padding: 6px 9px;
+  padding: 6px 7px;
   border-radius: 10px;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
@@ -1586,6 +1604,19 @@ body {
   color: #fff;
   background: rgba(124, 58, 237, 0.32);
   border-color: rgba(167, 139, 250, 0.72);
+  transform: translateY(-1px);
+}
+
+.quick-ext--orbit {
+  color: #a7f3d0;
+  background: rgba(16, 185, 129, 0.14);
+  border: 1px solid rgba(52, 211, 153, 0.36);
+}
+
+.quick-ext--orbit:hover {
+  color: #fff;
+  background: rgba(16, 185, 129, 0.32);
+  border-color: rgba(52, 211, 153, 0.74);
   transform: translateY(-1px);
 }
 
@@ -2201,8 +2232,8 @@ body {
 .modal__dialog {
   position: relative;
   z-index: 1;
-  width: min(740px, 100%);
-  max-height: min(90vh, 840px);
+  width: min(880px, 100%);
+  max-height: min(92vh, 920px);
   overflow-y: auto;
   padding: 28px;
   background: var(--surface-glass-strong);
@@ -2322,6 +2353,11 @@ body {
   border-top: 1px solid var(--border-subtle);
 }
 
+.btn--orbit {
+  background: linear-gradient(135deg, #059669, #0ea5e9);
+  color: #fff;
+}
+
 .btn--mpc {
   background: linear-gradient(135deg, #0284c7, #2563eb);
   color: #fff;
@@ -2332,10 +2368,264 @@ body {
   color: #fff;
 }
 
+.btn--orbit:hover,
 .btn--mpc:hover,
 .btn--jpl:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 26px rgba(37, 99, 235, 0.35);
+}
+
+/* ==========================================================================
+   Modal 內建 3D 動態軌道模擬與 MPC 官方互動軌道草圖面板
+   ========================================================================== */
+.orbit-panel {
+  border-radius: 18px;
+  background: rgba(4, 9, 24, 0.84);
+  border: 1px solid rgba(56, 189, 248, 0.24);
+  overflow: hidden;
+}
+
+.orbit-panel__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(10, 18, 42, 0.85);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.orbit-tabs {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.orbit-tab {
+  padding: 6px 13px;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.orbit-tab:hover {
+  color: var(--text-primary);
+  border-color: var(--border-bright);
+}
+
+.orbit-tab.is-active {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: rgba(56, 189, 248, 0.56);
+  color: #e0f2fe;
+}
+
+.orbit-ext-link {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #6ee7b7;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 9px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.34);
+  transition: background 0.16s ease;
+}
+
+.orbit-ext-link:hover {
+  background: rgba(16, 185, 129, 0.26);
+  color: #fff;
+}
+
+.orbit-stage {
+  position: relative;
+}
+
+.orbit-canvas {
+  display: block;
+  width: 100%;
+  height: 350px;
+  cursor: grab;
+  touch-action: none;
+}
+
+.orbit-canvas:active {
+  cursor: grabbing;
+}
+
+.orbit-hud-top {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.orbit-date-pill {
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(5, 10, 26, 0.78);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #bae6fd;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.orbit-drag-hint {
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(5, 10, 26, 0.65);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.orbit-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: rgba(7, 13, 32, 0.88);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.orbit-ctrl-btn {
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.orbit-ctrl-btn:hover {
+  color: #fff;
+  border-color: var(--border-bright);
+  background: rgba(255, 255, 255, 0.11);
+}
+
+.orbit-ctrl-btn.is-active {
+  background: rgba(56, 189, 248, 0.22);
+  border-color: rgba(56, 189, 248, 0.55);
+  color: #e0f2fe;
+}
+
+.orbit-ctrl-sep {
+  width: 1px;
+  height: 18px;
+  background: var(--border-subtle);
+  margin-inline: 2px;
+}
+
+.orbit-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 8px 14px;
+  background: rgba(4, 9, 24, 0.92);
+  border-top: 1px solid rgba(176, 206, 255, 0.08);
+  font-size: 0.73rem;
+  color: var(--text-muted);
+}
+
+.orbit-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.orbit-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 0;
+  border-top: 2.5px solid #38bdf8;
+}
+
+.orbit-swatch--dashed {
+  border-top-style: dashed;
+  opacity: 0.75;
+}
+
+.orbit-swatch--earth {
+  border-top-color: rgba(56, 189, 248, 0.55);
+  border-top-width: 1.5px;
+}
+
+.orbit-mpc-pane[hidden] {
+  display: none;
+}
+
+.orbit-mpc-note {
+  padding: 10px 14px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  background: rgba(10, 18, 42, 0.7);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.orbit-iframe-wrap {
+  width: 100%;
+  height: 430px;
+  background: #111;
+}
+
+.orbit-iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.orbit-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+  padding: 12px 14px;
+  background: rgba(7, 14, 34, 0.85);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.orbit-stat {
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(5, 10, 26, 0.7);
+  border: 1px solid rgba(176, 206, 255, 0.1);
+}
+
+.orbit-stat span {
+  display: block;
+  font-size: 0.69rem;
+  color: var(--text-muted);
+}
+
+.orbit-stat strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.86rem;
+  color: var(--text-primary);
+}
+
+.orbit-stat--alert {
+  border-color: rgba(255, 77, 109, 0.45);
+  background: rgba(255, 77, 109, 0.12);
+}
+
+.orbit-stat--alert strong {
+  color: #fecdd3;
 }
 
 /* ==========================================================================

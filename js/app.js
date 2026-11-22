@@ -30,6 +30,7 @@
     view: 'cards',
     lastDecoded: null,
     activeModalAsteroid: null,
+    activeOrbitViewer: null,
     activeHalfLetter: 'R'
   };
 
@@ -380,9 +381,19 @@
         : '';
       const mpcUrl = a.decoded.ok ? a.decoded.mpcUrl : '#';
       const jplUrl = a.decoded.ok ? a.decoded.jplUrl : '#';
+      const orbitBtn = a.mpcOrbitUrl
+        ? `<a href="${escapeHtml(a.mpcOrbitUrl)}" target="_blank" rel="noopener noreferrer" class="quick-ext quick-ext--orbit" title="前往 MPC 互動式軌道草圖（${escapeHtml(a.standard)}）">MPC 軌道草圖 ↗</a>`
+        : '';
+      const orbitTelemetry = a.orbit
+        ? `<div class="asteroid-card__orbit-strip mono">
+             <span>a <b>${a.orbit.a.toFixed(2)}</b> AU</span>
+             <span>e <b>${a.orbit.e.toFixed(3)}</b></span>
+             <span>i <b>${a.orbit.incl.toFixed(1)}°</b></span>
+           </div>`
+        : '';
 
       return `
-        <article class="asteroid-card ${cardTone}" role="button" tabindex="0" data-open-id="${a.id}" aria-label="檢視 ${escapeHtml(a.standard)} 詳細資料">
+        <article class="asteroid-card ${cardTone}" role="button" tabindex="0" data-open-id="${a.id}" aria-label="檢視 ${escapeHtml(a.standard)} 動態軌道與詳細資料">
           <div class="asteroid-card__head">
             <span class="asteroid-index">#${String(a.id).padStart(2, '0')}</span>
             ${renderTypeBadgeHtml(a)}
@@ -397,6 +408,8 @@
             </div>
           </div>
 
+          ${orbitTelemetry}
+
           <div class="asteroid-card__meta">
             <div>
               <span class="meta-cell__k">首次觀測日 (UT)</span>
@@ -409,13 +422,14 @@
           </div>
 
           <div class="asteroid-card__quicklinks">
-            <a href="${escapeHtml(mpcUrl)}" target="_blank" rel="noopener noreferrer" class="quick-ext quick-ext--mpc" title="前往 MPC 查詢 ${escapeHtml(a.standard)}：${escapeHtml(mpcUrl)}">MPC 官方查詢 ↗</a>
-            <a href="${escapeHtml(jplUrl)}" target="_blank" rel="noopener noreferrer" class="quick-ext quick-ext--jpl" title="前往 NASA JPL SBDB 查詢 ${escapeHtml(a.standard)}：${escapeHtml(jplUrl)}">NASA JPL SBDB ↗</a>
+            <a href="${escapeHtml(mpcUrl)}" target="_blank" rel="noopener noreferrer" class="quick-ext quick-ext--mpc" title="前往 MPC 查詢 ${escapeHtml(a.standard)}：${escapeHtml(mpcUrl)}">MPC 查詢 ↗</a>
+            <a href="${escapeHtml(jplUrl)}" target="_blank" rel="noopener noreferrer" class="quick-ext quick-ext--jpl" title="前往 NASA JPL SBDB 查詢 ${escapeHtml(a.standard)}：${escapeHtml(jplUrl)}">JPL SBDB ↗</a>
+            ${orbitBtn}
           </div>
 
           <div class="asteroid-card__foot">
             <span class="mono">${escapeHtml(a.halfMonthRange)} · 弧長 ${arcText}</span>
-            <span class="card-cta">詳情 →</span>
+            <span class="card-cta">3D 軌道與詳情 →</span>
           </div>
         </article>
       `;
@@ -434,6 +448,9 @@
         : '';
       const mpcUrl = a.decoded.ok ? a.decoded.mpcUrl : '#';
       const jplUrl = a.decoded.ok ? a.decoded.jplUrl : '#';
+      const orbitBtn = a.mpcOrbitUrl
+        ? `<a href="${escapeHtml(a.mpcOrbitUrl)}" target="_blank" rel="noopener noreferrer" class="quick-ext quick-ext--orbit" title="前往 MPC 互動式軌道草圖（${escapeHtml(a.standard)}）">MPC 軌道圖 ↗</a>`
+        : '';
 
       return `
         <div class="timeline-item ${tone}" role="button" tabindex="0" data-open-id="${a.id}">
@@ -456,9 +473,10 @@
           </div>
 
           <div class="timeline-actions">
+            ${orbitBtn}
             <a href="${escapeHtml(mpcUrl)}" target="_blank" rel="noopener noreferrer" class="quick-ext quick-ext--mpc" title="前往 MPC 查詢 ${escapeHtml(a.standard)}：${escapeHtml(mpcUrl)}">MPC ↗</a>
             <a href="${escapeHtml(jplUrl)}" target="_blank" rel="noopener noreferrer" class="quick-ext quick-ext--jpl" title="前往 NASA JPL SBDB 查詢 ${escapeHtml(a.standard)}：${escapeHtml(jplUrl)}">JPL SBDB ↗</a>
-            <span class="card-cta">詳情 →</span>
+            <span class="card-cta">3D 軌道 →</span>
           </div>
         </div>
       `;
@@ -469,10 +487,121 @@
   }
 
   /* ========================================================================
-     詳細資訊 Modal
+     詳細資訊 Modal（含 3D 動態軌道模擬 + MPC 官方互動式軌道草圖）
      ======================================================================== */
+  function destroyActiveOrbitViewer() {
+    if (state.activeOrbitViewer) {
+      state.activeOrbitViewer.destroy();
+      state.activeOrbitViewer = null;
+    }
+  }
+
+  function buildOrbitSectionHtml(asteroid) {
+    const o = asteroid.orbit;
+    if (!o) return '';
+
+    const periodYears = (o.periodDays / 365.256).toFixed(2);
+    const moidHtml = o.moid !== null && o.moid !== undefined
+      ? `<div class="orbit-stat orbit-stat--alert">
+           <span>地球 MOID</span>
+           <strong class="mono">${o.moid.toFixed(4)} AU</strong>
+         </div>`
+      : '';
+
+    const mpcOrbitLink = asteroid.mpcOrbitUrl
+      ? `<a href="${escapeHtml(asteroid.mpcOrbitUrl)}" target="_blank" rel="noopener noreferrer" class="orbit-ext-link" title="於新分頁開啟 MPC 官方互動式軌道草圖">另開 MPC 軌道草圖 ↗</a>`
+      : '';
+
+    return `
+      <div class="modal-section-title">互動式動態軌道圖（3D 模擬 / MPC 官方草圖）</div>
+      <div class="orbit-panel">
+        <div class="orbit-panel__bar">
+          <div class="orbit-tabs" role="tablist" aria-label="軌道圖模式切換">
+            <button type="button" class="orbit-tab is-active" data-orbit-tab="sim" role="tab" aria-selected="true">
+              ✦ 3D 動態軌道模擬
+            </button>
+            <button type="button" class="orbit-tab" data-orbit-tab="mpc" role="tab" aria-selected="false">
+              ◎ MPC 官方互動軌道草圖
+            </button>
+          </div>
+          ${mpcOrbitLink}
+        </div>
+
+        <!-- Tab 1: 自建 60fps 3D 克卜勒動態軌道 -->
+        <div id="orbitSimPane" class="orbit-stage">
+          <canvas id="modalOrbitCanvas" class="orbit-canvas" aria-label="${escapeHtml(asteroid.standard)} 3D 動態軌道模擬畫布"></canvas>
+          <div class="orbit-hud-top">
+            <span class="orbit-date-pill mono" id="orbitSimDate">模擬日期載入中...</span>
+            <span class="orbit-drag-hint">滑鼠拖拽旋轉 3D 視角 · 滾輪縮放</span>
+          </div>
+          <div class="orbit-controls">
+            <button type="button" class="orbit-ctrl-btn is-active" id="orbitPlayBtn">⏸ 暫停</button>
+            <button type="button" class="orbit-ctrl-btn" data-orbit-speed="15">慢速</button>
+            <button type="button" class="orbit-ctrl-btn is-active" data-orbit-speed="45">中速</button>
+            <button type="button" class="orbit-ctrl-btn" data-orbit-speed="180">高速</button>
+            <span class="orbit-ctrl-sep"></span>
+            <button type="button" class="orbit-ctrl-btn" data-orbit-preset="3d">立體 3D</button>
+            <button type="button" class="orbit-ctrl-btn" data-orbit-preset="top">俯視</button>
+            <button type="button" class="orbit-ctrl-btn" data-orbit-preset="side">側視傾角</button>
+            <span class="orbit-ctrl-sep"></span>
+            <button type="button" class="orbit-ctrl-btn" id="orbitZoomInBtn" title="放大">＋</button>
+            <button type="button" class="orbit-ctrl-btn" id="orbitZoomOutBtn" title="縮小">－</button>
+          </div>
+          <div class="orbit-legend">
+            <span><i class="orbit-swatch orbit-swatch--solid"></i>實線：黃道面以北</span>
+            <span><i class="orbit-swatch orbit-swatch--dashed"></i>虛線：黃道面以南</span>
+            <span><i class="orbit-swatch orbit-swatch--earth"></i>地球軌道（1 AU）</span>
+            <span>◆ 近日點 q</span>
+          </div>
+        </div>
+
+        <!-- Tab 2: 直接內嵌 MPC 官方 show_orbit 頁面 -->
+        <div id="orbitMpcPane" class="orbit-mpc-pane" hidden>
+          <div class="orbit-mpc-note">
+            <span>以下直接嵌入 IAU Minor Planet Center 官方 <strong>Interactive Orbit Sketch</strong>（歷元 Epoch ${escapeHtml(o.epoch)}）。若載入較慢可點擊右上角「另開 MPC 軌道草圖」。</span>
+          </div>
+          <div class="orbit-iframe-wrap">
+            <iframe
+              id="modalMpcOrbitFrame"
+              class="orbit-iframe"
+              title="${escapeHtml(asteroid.standard)} MPC 官方互動式軌道草圖"
+              data-src="${escapeHtml(asteroid.mpcOrbitUrl || '')}"
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
+
+        <!-- 軌道根數數據條 -->
+        <div class="orbit-stats-grid">
+          <div class="orbit-stat">
+            <span>半長軸 a</span>
+            <strong class="mono">${o.a.toFixed(3)} AU</strong>
+          </div>
+          <div class="orbit-stat">
+            <span>離心率 e</span>
+            <strong class="mono">${o.e.toFixed(4)}</strong>
+          </div>
+          <div class="orbit-stat">
+            <span>軌道傾角 i</span>
+            <strong class="mono">${o.incl.toFixed(2)}°</strong>
+          </div>
+          <div class="orbit-stat">
+            <span>近日點 / 遠日點</span>
+            <strong class="mono">${o.q.toFixed(2)} ～ ${o.ad.toFixed(2)} AU</strong>
+          </div>
+          <div class="orbit-stat">
+            <span>公轉週期</span>
+            <strong class="mono">${periodYears} 年</strong>
+          </div>
+          ${moidHtml}
+        </div>
+      </div>
+    `;
+  }
+
   function openModalByAsteroid(asteroid) {
     if (!asteroid) return;
+    destroyActiveOrbitViewer();
     state.activeModalAsteroid = asteroid;
     const d = asteroid.decoded;
 
@@ -482,6 +611,12 @@
     const arcLabel = asteroid.arcDays !== null ? `${asteroid.arcDays} 天` : '—';
     const noteHtml = asteroid.note
       ? `<div class="modal-note">✦ ${escapeHtml(asteroid.note)}</div>`
+      : '';
+    const mpcOrbitAction = asteroid.mpcOrbitUrl
+      ? `<a href="${escapeHtml(asteroid.mpcOrbitUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn--orbit" title="前往 MPC 官方互動式軌道草圖（${escapeHtml(asteroid.standard)}）">
+           <span>MPC 互動式軌道草圖</span>
+           <span>↗</span>
+         </a>`
       : '';
 
     els.modalBody.innerHTML = `
@@ -494,6 +629,8 @@
         <h2 id="modalTitle" class="modal-head__title">${escapeHtml(asteroid.standard)}</h2>
         <p class="modal-head__sub">${escapeHtml(asteroid.typeMeta.fullName)}</p>
       </div>
+
+      ${buildOrbitSectionHtml(asteroid)}
 
       <div class="modal-section-title">UT 觀測時間紀錄（資料來源：asteroids_dates.csv）</div>
       <div class="modal-obs-grid">
@@ -527,6 +664,7 @@
       </div>
 
       <div class="modal-actions">
+        ${mpcOrbitAction}
         <a href="${escapeHtml(d.mpcUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn--mpc" title="前往 MPC 查詢 ${escapeHtml(asteroid.standard)}：${escapeHtml(d.mpcUrl)}">
           <span>MPC 官方查詢（${escapeHtml(asteroid.standard)}）</span>
           <span>↗</span>
@@ -553,10 +691,72 @@
 
     els.modal.hidden = false;
     document.body.style.overflow = 'hidden';
+
+    // 掛載 3D 動態軌道畫布與控制項（在 Modal 顯示後確保取得正確寬高）
+    if (asteroid.orbit && window.OrbitViewer) {
+      const canvas = document.getElementById('modalOrbitCanvas');
+      const dateEl = document.getElementById('orbitSimDate');
+      const viewer = window.OrbitViewer.mount(canvas, asteroid, {
+        onDateUpdate(str) {
+          if (dateEl) dateEl.textContent = `模擬歷元 ${str}`;
+        }
+      });
+      state.activeOrbitViewer = viewer;
+
+      const playBtn = document.getElementById('orbitPlayBtn');
+      if (playBtn && viewer) {
+        playBtn.addEventListener('click', () => {
+          const playing = viewer.togglePlay();
+          playBtn.textContent = playing ? '⏸ 暫停' : '▶ 播放';
+          playBtn.classList.toggle('is-active', playing);
+        });
+      }
+
+      els.modalBody.querySelectorAll('[data-orbit-speed]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          els.modalBody.querySelectorAll('[data-orbit-speed]').forEach((b) => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+          viewer && viewer.setSpeed(Number(btn.dataset.orbitSpeed));
+        });
+      });
+
+      els.modalBody.querySelectorAll('[data-orbit-preset]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          viewer && viewer.setPreset(btn.dataset.orbitPreset);
+        });
+      });
+
+      const zoomIn = document.getElementById('orbitZoomInBtn');
+      const zoomOut = document.getElementById('orbitZoomOutBtn');
+      if (zoomIn && viewer) zoomIn.addEventListener('click', () => viewer.zoomBy(1.22));
+      if (zoomOut && viewer) zoomOut.addEventListener('click', () => viewer.zoomBy(0.82));
+
+      // Tab 切換：3D 動態軌道模擬 ↔ MPC 官方互動軌道草圖 iframe
+      const simPane = document.getElementById('orbitSimPane');
+      const mpcPane = document.getElementById('orbitMpcPane');
+      const mpcFrame = document.getElementById('modalMpcOrbitFrame');
+      els.modalBody.querySelectorAll('[data-orbit-tab]').forEach((tabBtn) => {
+        tabBtn.addEventListener('click', () => {
+          const mode = tabBtn.dataset.orbitTab;
+          els.modalBody.querySelectorAll('[data-orbit-tab]').forEach((t) => {
+            const active = t.dataset.orbitTab === mode;
+            t.classList.toggle('is-active', active);
+            t.setAttribute('aria-selected', String(active));
+          });
+          if (simPane) simPane.hidden = mode !== 'sim';
+          if (mpcPane) mpcPane.hidden = mode !== 'mpc';
+          if (mode === 'mpc' && mpcFrame && !mpcFrame.src && mpcFrame.dataset.src) {
+            mpcFrame.src = mpcFrame.dataset.src;
+          }
+        });
+      });
+    }
+
     els.modalCloseBtn.focus();
   }
 
   function closeModal() {
+    destroyActiveOrbitViewer();
     els.modal.hidden = true;
     document.body.style.overflow = '';
     state.activeModalAsteroid = null;
