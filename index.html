@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>嘉義市天文協會合作巡天計畫發現成果記錄｜小行星臨時編號解碼與觀測儀表板</title>
-  <meta name="description" content="嘉義市天文協會合作巡天計畫發現成果記錄：收錄 14 顆小行星觀測成果（含 PHA 與 Apollo 型近地小行星），整合 IAU / MPC 小行星臨時編號雙向解碼器與互動式編號規則圖鑑。" />
+  <title>嘉義市天文協會-麗江雙子天文台天體搜尋計劃｜小行星臨時編號解碼與發現成果</title>
+  <meta name="description" content="嘉義市天文協會-麗江雙子天文台天體搜尋計劃發現成果記錄：收錄 14 顆小行星觀測成果（含 PHA 與 Apollo 型近地小行星），整合 IAU / MPC 小行星臨時編號雙向解碼器、3D 動態軌道模擬與互動式編號規則圖鑑。" />
 
   <!-- Google Fonts: Outfit (幾何天文標題) + Noto Sans TC (繁體中文) + JetBrains Mono (等寬編號與公式) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -46,17 +46,17 @@
         </span>
         <span class="brand__text">
           <span class="brand__title">嘉義市天文協會</span>
-          <span class="brand__sub">合作巡天計畫發現成果記錄</span>
+          <span class="brand__sub">麗江雙子天文台天體搜尋計劃</span>
         </span>
       </a>
 
       <nav class="nav-links" aria-label="主要區塊導覽">
         <a href="#decoder" class="nav-link">雙向解碼器</a>
-        <a href="#dashboard" class="nav-link">巡天發現成果</a>
+        <a href="#dashboard" class="nav-link">天體搜尋成果</a>
         <a href="#guide" class="nav-link">編號規則圖鑑</a>
       </nav>
 
-      <div class="nav-telemetry" title="已載入嘉義市天文協會合作巡天計畫 14 顆小行星精確觀測日（UT）">
+      <div class="nav-telemetry" title="已載入嘉義市天文協會-麗江雙子天文台天體搜尋計劃 14 顆小行星精確觀測日（UT）">
         <span class="telemetry-dot"></span>
         <span id="navDataStatus">14 顆發現 · UT 同步</span>
       </div>
@@ -69,16 +69,16 @@
       <div class="container hero__grid">
         <div class="hero__copy">
           <div class="eyebrow">
-            <span class="eyebrow__tag">CHIAYI ASTRONOMICAL ASSOCIATION</span>
+            <span class="eyebrow__tag">CHIAYI ASTRONOMICAL ASSOCIATION × LIJIANG GEMINI OBSERVATORY</span>
             <span class="eyebrow__sep"></span>
-            <span>IAU / MPC 合作巡天觀測檔案</span>
+            <span>IAU / MPC 天體搜尋觀測檔案</span>
           </div>
           <h1 class="hero__title">
-            嘉義市天文協會<br />
-            <span class="hero__title-accent">合作巡天計畫發現成果記錄</span>
+            嘉義市天文協會-<br />
+            <span class="hero__title-accent">麗江雙子天文台天體搜尋計劃</span>
           </h1>
           <p class="hero__desc">
-            完整記錄嘉義市天文協會參與合作巡天計畫所發現的 14 顆小行星觀測軌跡（包含潛在威脅近地小行星 <strong>2026 RF10</strong> 與阿波羅型近地小行星 <strong>2026 VQ20</strong>）。結合 IAU / MPC 臨時編號雙向解碼器與互動規則圖鑑，一次掌握每顆小行星的發現時窗、順位與官方資料庫查詢。
+            完整收錄「嘉義市天文協會-麗江雙子天文台天體搜尋計劃」所發現的 14 顆小行星觀測軌跡與動態軌道（包含潛在威脅近地小行星 <strong>2026 RF10</strong> 與阿波羅型近地小行星 <strong>2026 VQ20</strong>）。結合 IAU / MPC 臨時編號雙向解碼器、3D 互動軌道模擬與規則圖鑑，一次掌握每顆小行星的發現時窗、順位與官方資料庫查詢。
           </p>
           <div class="hero__actions">
             <a href="#dashboard" class="btn btn--primary">
@@ -216,7 +216,7 @@
                 </button>
                 <button type="button" class="sample-chip" data-sample="2025 WO11">
                   <span class="mono">2025 WO11</span>
-                  <small>巡天首發</small>
+                  <small>計劃首發</small>
                 </button>
                 <button type="button" class="sample-chip" data-sample="2026 AA">
                   <span class="mono">2026 AA</span>
@@ -326,14 +326,14 @@
     </section>
 
     <!-- ============================================================ -->
-    <!-- 模組 2：嘉義市天文協會合作巡天計畫 14 顆發現成果儀表板         -->
+    <!-- 模組 2：嘉義市天文協會-麗江雙子天文台天體搜尋計劃 14 顆成果    -->
     <!-- ============================================================ -->
     <section id="dashboard" class="section">
       <div class="container">
         <div class="section-head">
-          <div class="section-head__meta">MODULE 02 · CHIAYI SKY SURVEY DISCOVERY ARCHIVE</div>
-          <h2 class="section-head__title">嘉義市天文協會合作巡天計畫 14 顆發現成果</h2>
-          <p class="section-head__sub">整合 2025–2026 年合作巡天計畫之小行星發現紀錄與精確 UT 觀測日期，點擊卡片或快捷按鈕即可檢視完整編號拆解並直連 MPC 與 NASA JPL 資料庫。</p>
+          <div class="section-head__meta">MODULE 02 · LIJIANG GEMINI OBSERVATORY ASTEROID SEARCH ARCHIVE</div>
+          <h2 class="section-head__title">嘉義市天文協會-麗江雙子天文台天體搜尋計劃 14 顆發現成果</h2>
+          <p class="section-head__sub">彙整 2025–2026 年天體搜尋計劃之小行星發現紀錄、精確 UT 觀測日期與 3D 動態軌道，點擊卡片或快捷按鈕即可檢視完整編號拆解並直連 MPC 與 NASA JPL 資料庫。</p>
         </div>
 
         <!-- KPI 統計卡片 -->
@@ -344,7 +344,7 @@
               <span class="kpi-icon kpi-icon--total" aria-hidden="true">✦</span>
             </div>
             <div class="kpi-card__num mono" id="kpiTotal">14</div>
-            <div class="kpi-card__foot">合作巡天計畫 2025/11 ～ 2026/11</div>
+            <div class="kpi-card__foot">天體搜尋計劃 2025/11 ～ 2026/11</div>
           </div>
 
           <div class="glass-panel kpi-card">
@@ -450,7 +450,7 @@
         <div class="section-head">
           <div class="section-head__meta">MODULE 03 · INTERACTIVE VISUAL ATLAS</div>
           <h2 class="section-head__title">IAU / MPC 編號規則視覺化圖鑑</h2>
-          <p class="section-head__sub">專為天文科普與推廣教學設計：滑鼠移過任一半月字母即可高亮對應月份，並檢視嘉義市天文協會合作巡天計畫在該半月的發現紀錄。</p>
+          <p class="section-head__sub">專為天文科普與推廣教學設計：滑鼠移過任一半月字母即可高亮對應月份，並檢視嘉義市天文協會-麗江雙子天文台天體搜尋計劃在該半月的發現紀錄。</p>
         </div>
 
         <!-- 互動式 24 個半月對照表（A–Y） -->
@@ -481,8 +481,8 @@
               <span>一年固定 12 個月 × 2 ＝ 24 個半月，剛好用完 A–Y（扣除 I）共 24 個字母。</span>
             </div>
             <div class="callout-pill">
-              <span class="callout-pill__code mono">★ 巡天發現</span>
-              <span>亮點星標代表合作巡天計畫曾於該半月發現小行星（如 <strong>T</strong> 有 5 顆、<strong>V</strong> 有 4 顆）。</span>
+              <span class="callout-pill__code mono">★ 搜尋發現</span>
+              <span>亮點星標代表本天體搜尋計劃曾於該半月發現小行星（如 <strong>T</strong> 有 5 顆、<strong>V</strong> 有 4 顆）。</span>
             </div>
           </div>
         </div>
@@ -602,7 +602,7 @@
   <footer class="site-footer">
     <div class="container site-footer__inner">
       <div>
-        <strong>嘉義市天文協會合作巡天計畫發現成果記錄</strong>
+        <strong>嘉義市天文協會-麗江雙子天文台天體搜尋計劃</strong>
         <p>依據 IAU / Minor Planet Center（MPC）Provisional Designation 官方規範建置 · 支援離線瀏覽與 CSV 觀測日匯入。</p>
       </div>
       <div class="footer-links">

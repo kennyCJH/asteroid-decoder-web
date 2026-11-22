@@ -1,5 +1,5 @@
 /**
- * 嘉義市天文協會合作巡天計畫 14 顆小行星成果資料集與 CSV/TSV 匯入解析器
+ * 嘉義市天文協會-麗江雙子天文台天體搜尋計劃 14 顆小行星成果資料集與 CSV/TSV 匯入解析器
  * - 精確觀測日（UT）讀取自專案目錄內的 asteroids_dates.csv.txt
  * - 軌道根數（Orbital Elements）取自 NASA JPL SBDB / IAU MPC 官方資料庫
  */

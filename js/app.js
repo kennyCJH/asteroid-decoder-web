@@ -1,5 +1,5 @@
 /**
- * 嘉義市天文協會合作巡天計畫發現成果記錄 — 主控邏輯
+ * 嘉義市天文協會-麗江雙子天文台天體搜尋計劃 — 主控邏輯
  */
 (function () {
   'use strict';
@@ -292,7 +292,7 @@
       els.matchBanner.innerHTML = `
         <div class="match-banner__info">
           <span class="type-badge ${badgeClass}">${dot}${escapeHtml(matched.type)}</span>
-          <span>✨ 此編號屬於<strong>嘉義市天文協會合作巡天計畫發現成果（項次 #${matched.id}）</strong> · 首次觀測 UT <code class="mono">${escapeHtml(matched.firstObsISO || '—')}</code></span>
+          <span>✨ 此編號屬於<strong>嘉義市天文協會-麗江雙子天文台天體搜尋計劃發現成果（項次 #${matched.id}）</strong> · 首次觀測 UT <code class="mono">${escapeHtml(matched.firstObsISO || '—')}</code></span>
         </div>
         <button type="button" class="match-banner__btn" data-open-id="${matched.id}">開啟完整觀測報告 →</button>
       `;
@@ -622,7 +622,7 @@
     els.modalBody.innerHTML = `
       <div class="modal-head">
         <div class="modal-head__badges">
-          <span class="asteroid-index">巡天計畫發現項次 #${String(asteroid.id).padStart(2, '0')}</span>
+          <span class="asteroid-index">天體搜尋計劃發現項次 #${String(asteroid.id).padStart(2, '0')}</span>
           ${renderTypeBadgeHtml(asteroid)}
           <span class="packed-pill">MPC ${escapeHtml(asteroid.packed)}</span>
         </div>
@@ -790,7 +790,7 @@
 
     if (hits.length > 0) {
       const names = hits.map((h) => h.standard).join('、');
-      els.inspectorSub.textContent = `★ 合作巡天計畫於此半月共發現 ${hits.length} 顆：${names}（點擊可帶入解碼器）`;
+      els.inspectorSub.textContent = `★ 本天體搜尋計劃於此半月共發現 ${hits.length} 顆：${names}（點擊可帶入解碼器）`;
     } else {
       const skipNote = info.skippedBefore ? '（注意：前一位跳過字母 I）· ' : '';
       els.inspectorSub.textContent = `${skipNote}點擊此格將範例「2026 ${letter}A」帶入解碼器`;
@@ -820,7 +820,7 @@
         const hits = byLetter[h.letter] || [];
         const hasHit = hits.length > 0;
         const endText = h.leapVariable ? '月底' : h.endDay;
-        const star = hasHit ? `<span class="half-cell__star" title="合作巡天計畫發現 ${hits.length} 顆">★${hits.length}</span>` : '';
+        const star = hasHit ? `<span class="half-cell__star" title="天體搜尋計劃發現 ${hits.length} 顆">★${hits.length}</span>` : '';
 
         return `
           <button
