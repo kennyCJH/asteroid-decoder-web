@@ -22,6 +22,18 @@
     { num: 12, zh: '12 月', en: 'DEC' }
   ];
 
+  // 匯入 CSV 驗證密碼（astros）
+  const CSV_UPLOAD_PASSWORD_CODES = [97, 115, 116, 114, 111, 115];
+
+  function verifyCsvPassword(input) {
+    const str = String(input || '');
+    if (str.length !== CSV_UPLOAD_PASSWORD_CODES.length) return false;
+    for (let i = 0; i < CSV_UPLOAD_PASSWORD_CODES.length; i++) {
+      if (str.charCodeAt(i) !== CSV_UPLOAD_PASSWORD_CODES[i]) return false;
+    }
+    return true;
+  }
+
   // 應用狀態
   const state = {
     asteroids: DataStore.hydrateAsteroids(DataStore.DEFAULT_ASTEROIDS),
@@ -31,6 +43,7 @@
     lastDecoded: null,
     activeModalAsteroid: null,
     activeOrbitViewer: null,
+    csvUploadAuthorized: false,
     activeHalfLetter: 'R'
   };
 
@@ -77,7 +90,16 @@
     cardsGrid: document.getElementById('asteroidCardsGrid'),
     timeline: document.getElementById('asteroidTimeline'),
     sortSelect: document.getElementById('sortSelect'),
+    csvUploadTriggerBtn: document.getElementById('csvUploadTriggerBtn'),
     csvFileInput: document.getElementById('csvFileInput'),
+
+    csvAuthModal: document.getElementById('csvAuthModal'),
+    csvAuthDialog: document.getElementById('csvAuthDialog'),
+    csvAuthCloseBtn: document.getElementById('csvAuthCloseBtn'),
+    csvAuthCancelBtn: document.getElementById('csvAuthCancelBtn'),
+    csvAuthForm: document.getElementById('csvAuthForm'),
+    csvPasswordInput: document.getElementById('csvPasswordInput'),
+    csvAuthError: document.getElementById('csvAuthError'),
 
     monthsMatrix: document.getElementById('monthsMatrix'),
     inspectorLetter: document.getElementById('inspectorLetter'),
@@ -1049,8 +1071,67 @@
     els.timeline.addEventListener('click', handleOpenFromList);
     els.timeline.addEventListener('keydown', handleKeydownFromList);
 
-    // CSV / TSV 匯入
+    // 匯入 CSV 密碼驗證視窗控制
+    function openCsvAuthModal() {
+      state.csvUploadAuthorized = false;
+      els.csvPasswordInput.value = '';
+      els.csvAuthError.hidden = true;
+      els.csvAuthError.textContent = '';
+      els.csvAuthDialog.classList.remove('is-shake');
+      els.csvAuthModal.hidden = false;
+      document.body.style.overflow = 'hidden';
+      els.csvPasswordInput.focus();
+    }
+
+    function closeCsvAuthModal() {
+      els.csvAuthModal.hidden = true;
+      if (els.modal.hidden) {
+        document.body.style.overflow = '';
+      }
+      els.csvPasswordInput.value = '';
+      els.csvAuthError.hidden = true;
+    }
+
+    els.csvUploadTriggerBtn.addEventListener('click', openCsvAuthModal);
+    els.csvAuthCloseBtn.addEventListener('click', closeCsvAuthModal);
+    els.csvAuthCancelBtn.addEventListener('click', closeCsvAuthModal);
+    els.csvAuthModal.addEventListener('click', (e) => {
+      if (e.target && e.target.dataset && e.target.dataset.closeAuth === 'true') {
+        closeCsvAuthModal();
+      }
+    });
+
+    els.csvAuthForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const entered = els.csvPasswordInput.value;
+      if (!verifyCsvPassword(entered)) {
+        state.csvUploadAuthorized = false;
+        els.csvAuthError.textContent = '密碼錯誤，無法開啟上傳功能頁面，請重新輸入。';
+        els.csvAuthError.hidden = false;
+        els.csvAuthDialog.classList.remove('is-shake');
+        void els.csvAuthDialog.offsetWidth;
+        els.csvAuthDialog.classList.add('is-shake');
+        els.csvPasswordInput.value = '';
+        els.csvPasswordInput.focus();
+        return;
+      }
+
+      // 密碼正確：立即標記一次性授權並同步開啟檔案選擇視窗
+      state.csvUploadAuthorized = true;
+      closeCsvAuthModal();
+      els.csvFileInput.value = '';
+      els.csvFileInput.click();
+    });
+
+    // CSV / TSV 匯入（僅限密碼驗證通過後執行）
     els.csvFileInput.addEventListener('change', async (e) => {
+      if (!state.csvUploadAuthorized) {
+        e.target.value = '';
+        showToast('請先通過密碼驗證再匯入 CSV 檔案。');
+        return;
+      }
+      state.csvUploadAuthorized = false;
+
       const file = e.target.files && e.target.files[0];
       if (!file) return;
       try {
@@ -1109,8 +1190,12 @@
       }
     });
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !els.modal.hidden) {
-        closeModal();
+      if (e.key === 'Escape') {
+        if (!els.csvAuthModal.hidden) {
+          closeCsvAuthModal();
+        } else if (!els.modal.hidden) {
+          closeModal();
+        }
       }
     });
   }
