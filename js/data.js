@@ -1,5 +1,5 @@
 /**
- * 嘉義市天文協會-麗江雙子天文台天體搜尋計劃 17 顆小行星成果資料集與 CSV/TSV 匯入解析器
+ * 嘉義市天文協會-麗江雙子天文台天體搜尋計劃 16 顆小行星成果資料集與 CSV/TSV 匯入解析器
  * - 精確觀測日（UT）整合自 asteroids_dates.csv.txt 與 NASA JPL SBDB 官方資料庫
  * - 軌道根數（Orbital Elements）取自 NASA JPL SBDB / IAU MPC 官方資料庫
  */
@@ -78,30 +78,6 @@
     },
     {
       id: 4,
-      type: 'MBA',
-      packed: 'K26J04Y',
-      standard: '2026 JY4',
-      halfMonthRange: '2026-05-01 ～ 05-15',
-      firstObsUT: '2017/3/8',
-      latestObsUT: '2017/3/18',
-      note: '含 2017 年歷史回溯觀測（Precovery）連結紀錄',
-      orbit: {
-        epoch: '2017-03-17.0',
-        epochJd: 2457829.5,
-        a: 2.6985349,
-        e: 0.0997573,
-        incl: 2.8563409,
-        node: 45.4921651,
-        peri: 160.9320009,
-        m: 333.4165203,
-        q: 2.4293364,
-        ad: 2.9677333,
-        periodDays: 1619.163,
-        moid: 1.42512
-      }
-    },
-    {
-      id: 5,
       type: 'NEO(PHA)',
       packed: 'K26R10F',
       standard: '2026 RF10',
@@ -126,7 +102,7 @@
       }
     },
     {
-      id: 6,
+      id: 5,
       type: 'MBA',
       packed: 'K26TC7W',
       standard: '2026 TW127',
@@ -149,7 +125,7 @@
       }
     },
     {
-      id: 7,
+      id: 6,
       type: 'MBA',
       packed: 'K26TD7Q',
       standard: '2026 TQ137',
@@ -172,7 +148,7 @@
       }
     },
     {
-      id: 8,
+      id: 7,
       type: 'MBA',
       packed: 'K26TD8B',
       standard: '2026 TB138',
@@ -195,7 +171,7 @@
       }
     },
     {
-      id: 9,
+      id: 8,
       type: 'MBA',
       packed: 'K26TE6J',
       standard: '2026 TJ146',
@@ -218,7 +194,7 @@
       }
     },
     {
-      id: 10,
+      id: 9,
       type: 'NEO(APOLLOA)',
       packed: 'K26V20Q',
       standard: '2026 VQ20',
@@ -243,7 +219,7 @@
       }
     },
     {
-      id: 11,
+      id: 10,
       type: 'MBA',
       packed: 'K26V21W',
       standard: '2026 VW21',
@@ -266,7 +242,7 @@
       }
     },
     {
-      id: 12,
+      id: 11,
       type: 'MBA',
       packed: 'K26TG1V',
       standard: '2026 TV161',
@@ -289,7 +265,7 @@
       }
     },
     {
-      id: 13,
+      id: 12,
       type: 'MBA',
       packed: 'K26V29K',
       standard: '2026 VK29',
@@ -312,7 +288,7 @@
       }
     },
     {
-      id: 14,
+      id: 13,
       type: 'MBA',
       packed: 'K26V25D',
       standard: '2026 VD25',
@@ -335,7 +311,7 @@
       }
     },
     {
-      id: 15,
+      id: 14,
       type: 'MBA',
       packed: 'K26V40G',
       standard: '2026 VG40',
@@ -346,7 +322,7 @@
       orbit: null
     },
     {
-      id: 16,
+      id: 15,
       type: 'MBA',
       packed: 'K26V42G',
       standard: '2026 VG42',
@@ -369,7 +345,7 @@
       }
     },
     {
-      id: 17,
+      id: 16,
       type: 'MBA',
       packed: 'K26V42N',
       standard: '2026 VN42',

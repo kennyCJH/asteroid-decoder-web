@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>嘉義市天文協會-麗江雙子天文台天體搜尋計劃｜小行星臨時編號解碼與發現成果</title>
-  <meta name="description" content="嘉義市天文協會-麗江雙子天文台天體搜尋計劃發現成果記錄：收錄 17 顆小行星觀測成果（含 PHA 與 Apollo 型近地小行星），整合 IAU / MPC 小行星臨時編號雙向解碼器、3D 動態軌道模擬與互動式編號規則圖鑑。" />
+  <meta name="description" content="嘉義市天文協會-麗江雙子天文台天體搜尋計劃發現成果記錄：收錄 16 顆小行星觀測成果（含 PHA 與 Apollo 型近地小行星），整合 IAU / MPC 小行星臨時編號雙向解碼器、3D 動態軌道模擬、互動式編號規則圖鑑與觀測團隊介紹。" />
 
   <!-- Google Fonts: Outfit (幾何天文標題) + Noto Sans TC (繁體中文) + JetBrains Mono (等寬編號與公式) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -54,11 +54,12 @@
         <a href="#decoder" class="nav-link">雙向解碼器</a>
         <a href="#dashboard" class="nav-link">天體搜尋成果</a>
         <a href="#guide" class="nav-link">編號規則圖鑑</a>
+        <a href="#team" class="nav-link nav-link--team">觀測團隊</a>
       </nav>
 
-      <div class="nav-telemetry" title="已載入嘉義市天文協會-麗江雙子天文台天體搜尋計劃 17 顆小行星觀測檔案">
+      <div class="nav-telemetry" title="已載入嘉義市天文協會-麗江雙子天文台天體搜尋計劃 16 顆小行星觀測檔案">
         <span class="telemetry-dot"></span>
-        <span id="navDataStatus">17 顆發現 · UT 同步</span>
+        <span id="navDataStatus">16 顆發現 · UT 同步</span>
       </div>
     </div>
   </header>
@@ -78,15 +79,18 @@
             <span class="hero__title-accent">麗江雙子天文台天體搜尋計劃</span>
           </h1>
           <p class="hero__desc">
-            完整收錄「嘉義市天文協會-麗江雙子天文台天體搜尋計劃」所發現的 <span id="heroDescCount">17</span> 顆小行星觀測軌跡與動態軌道（包含潛在威脅近地小行星 <strong>2026 RF10</strong> 與阿波羅型近地小行星 <strong>2026 VQ20</strong>）。結合 IAU / MPC 臨時編號雙向解碼器、3D 互動軌道模擬與規則圖鑑，一次掌握每顆小行星的發現時窗、順位與官方資料庫查詢。
+            完整收錄「嘉義市天文協會-麗江雙子天文台天體搜尋計劃」所發現的 <span id="heroDescCount">16</span> 顆小行星觀測軌跡與動態軌道（包含潛在威脅近地小行星 <strong>2026 RF10</strong> 與阿波羅型近地小行星 <strong>2026 VQ20</strong>）。結合 IAU / MPC 臨時編號雙向解碼器、3D 互動軌道模擬與規則圖鑑，一次掌握每顆小行星的發現時窗、順位與官方資料庫查詢。
           </p>
           <div class="hero__actions">
             <a href="#dashboard" class="btn btn--primary">
-              <span>瀏覽 <span id="heroBrowseCount">17</span> 顆發現成果</span>
+              <span>瀏覽 <span id="heroBrowseCount">16</span> 顆發現成果</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
             </a>
             <a href="#decoder" class="btn btn--glass">
               <span>小行星編號雙向解碼</span>
+            </a>
+            <a href="#team" class="btn btn--glass">
+              <span>認識觀測團隊</span>
             </a>
           </div>
         </div>
@@ -142,7 +146,7 @@
               <span>2026 VQ20 · APOLLOA</span>
             </div>
             <div class="radar-chip radar-chip--count">
-              <span class="mono" id="heroRadarCount">17</span> OBJECTS TRACKED
+              <span class="mono" id="heroRadarCount">16</span> OBJECTS TRACKED
             </div>
           </div>
         </div>
@@ -326,13 +330,13 @@
     </section>
 
     <!-- ============================================================ -->
-    <!-- 模組 2：嘉義市天文協會-麗江雙子天文台天體搜尋計劃 17 顆成果    -->
+    <!-- 模組 2：嘉義市天文協會-麗江雙子天文台天體搜尋計劃 16 顆成果    -->
     <!-- ============================================================ -->
     <section id="dashboard" class="section">
       <div class="container">
         <div class="section-head">
           <div class="section-head__meta">MODULE 02 · LIJIANG GEMINI OBSERVATORY ASTEROID SEARCH ARCHIVE</div>
-          <h2 class="section-head__title">嘉義市天文協會-麗江雙子天文台天體搜尋計劃 <span id="dashboardTitleCount">17</span> 顆發現成果</h2>
+          <h2 class="section-head__title">嘉義市天文協會-麗江雙子天文台天體搜尋計劃 <span id="dashboardTitleCount">16</span> 顆發現成果</h2>
           <p class="section-head__sub">彙整 2025–2026 年天體搜尋計劃之小行星發現紀錄、精確 UT 觀測日期與 3D 動態軌道，點擊卡片或快捷按鈕即可檢視完整編號拆解並直連 MPC 與 NASA JPL 資料庫。</p>
         </div>
 
@@ -343,7 +347,7 @@
               <span class="kpi-card__label">總發現數量</span>
               <span class="kpi-icon kpi-icon--total" aria-hidden="true">✦</span>
             </div>
-            <div class="kpi-card__num mono" id="kpiTotal">17</div>
+            <div class="kpi-card__num mono" id="kpiTotal">16</div>
             <div class="kpi-card__foot">天體搜尋計劃 2025/11 ～ 2026/11</div>
           </div>
 
@@ -352,8 +356,8 @@
               <span class="kpi-card__label">主帶小行星（MBA）</span>
               <span class="kpi-icon kpi-icon--mba" aria-hidden="true">◉</span>
             </div>
-            <div class="kpi-card__num mono" id="kpiMba">15</div>
-            <div class="kpi-card__foot" id="kpiMbaPct">佔總發現數 88.2% · 火星與木星軌道間</div>
+            <div class="kpi-card__num mono" id="kpiMba">14</div>
+            <div class="kpi-card__foot" id="kpiMbaPct">佔總發現數 87.5% · 火星與木星軌道間</div>
           </div>
 
           <div class="glass-panel kpi-card kpi-card--neo">
@@ -392,8 +396,8 @@
         <!-- 篩選、排序、檢視切換與 CSV 匯入工具列 -->
         <div class="glass-panel toolbar">
           <div class="toolbar__group" role="group" aria-label="依小行星類型篩選">
-            <button type="button" class="filter-btn is-active" data-filter="ALL">全部 <span class="badge-count" id="countAll">17</span></button>
-            <button type="button" class="filter-btn" data-filter="MBA">MBA <span class="badge-count" id="countMba">15</span></button>
+            <button type="button" class="filter-btn is-active" data-filter="ALL">全部 <span class="badge-count" id="countAll">16</span></button>
+            <button type="button" class="filter-btn" data-filter="MBA">MBA <span class="badge-count" id="countMba">14</span></button>
             <button type="button" class="filter-btn filter-btn--pha" data-filter="NEO(PHA)">NEO(PHA) <span class="badge-count" id="countPha">1</span></button>
             <button type="button" class="filter-btn filter-btn--apollo" data-filter="NEO(APOLLOA)">NEO(APOLLOA) <span class="badge-count" id="countApollo">1</span></button>
           </div>
@@ -402,7 +406,7 @@
             <label class="sort-control">
               <span class="sort-control__label">排序</span>
               <select id="sortSelect" class="sort-select">
-                <option value="id" id="sortIdOption">依項次（1 → 17）</option>
+                <option value="id" id="sortIdOption">依項次（1 → 16）</option>
                 <option value="firstObsDesc">依首次觀測日（新 → 舊）</option>
                 <option value="firstObsAsc">依首次觀測日（舊 → 新）</option>
                 <option value="orderDesc">依半月發現順位（高 → 低）</option>
@@ -431,7 +435,7 @@
 
         <div class="data-source-note">
           <span class="data-source-note__dot"></span>
-          <span>資料來源：<strong id="dataSourceText">asteroids_dates.csv.txt ＋ NASA JPL SBDB（已收錄 17 顆發現紀錄與觀測日）</strong></span>
+          <span>資料來源：<strong id="dataSourceText">asteroids_dates.csv.txt ＋ NASA JPL SBDB（已收錄 16 顆發現紀錄與觀測日）</strong></span>
         </div>
 
         <!-- 卡片檢視容器 -->
@@ -593,6 +597,93 @@
                 </p>
               </div>
             </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 模組 4：觀測團隊（Observation & Search Team）                 -->
+    <!-- ============================================================ -->
+    <section id="team" class="section section--team">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-head__meta">MODULE 04 · OBSERVATION &amp; SEARCH TEAM</div>
+          <h2 class="section-head__title">觀測團隊</h2>
+          <p class="section-head__sub">結合臺灣各地與廈門之天文同好、學者、醫師、教師與儀器工程師，攜手執行「嘉義市天文協會-麗江雙子天文台天體搜尋計劃」之觀測、搜尋與資料紀錄工作。</p>
+        </div>
+
+        <div class="team-grid">
+          <article class="glass-panel team-card">
+            <div class="team-card__top">
+              <span class="team-avatar team-avatar--cyan" aria-hidden="true">黃</span>
+              <span class="team-loc">📍 嘉義</span>
+            </div>
+            <h3 class="team-card__name">黃傅俊</h3>
+            <p class="team-card__role">退休教師</p>
+          </article>
+
+          <article class="glass-panel team-card">
+            <div class="team-card__top">
+              <span class="team-avatar team-avatar--emerald" aria-hidden="true">鄭</span>
+              <span class="team-loc">📍 嘉義</span>
+            </div>
+            <h3 class="team-card__name">鄭伯良</h3>
+            <p class="team-card__role">醫師</p>
+          </article>
+
+          <article class="glass-panel team-card">
+            <div class="team-card__top">
+              <span class="team-avatar team-avatar--violet" aria-hidden="true">葉</span>
+              <span class="team-loc">📍 台中</span>
+            </div>
+            <h3 class="team-card__name">葉宏毅</h3>
+            <p class="team-card__role">教師</p>
+          </article>
+
+          <article class="glass-panel team-card">
+            <div class="team-card__top">
+              <span class="team-avatar team-avatar--amber" aria-hidden="true">李</span>
+              <span class="team-loc">📍 花蓮</span>
+            </div>
+            <h3 class="team-card__name">李昱星</h3>
+            <p class="team-card__role">愛爾蘭大學天文研究所博士生</p>
+          </article>
+
+          <article class="glass-panel team-card">
+            <div class="team-card__top">
+              <span class="team-avatar team-avatar--cyan" aria-hidden="true">楊</span>
+              <span class="team-loc">📍 高雄</span>
+            </div>
+            <h3 class="team-card__name">楊杰霖</h3>
+            <p class="team-card__role">中央大學天文研究所碩士生</p>
+          </article>
+
+          <article class="glass-panel team-card">
+            <div class="team-card__top">
+              <span class="team-avatar team-avatar--emerald" aria-hidden="true">蔡</span>
+              <span class="team-loc">📍 高雄</span>
+            </div>
+            <h3 class="team-card__name">蔡元生</h3>
+            <p class="team-card__role">儀器工程師</p>
+          </article>
+
+          <article class="glass-panel team-card">
+            <div class="team-card__top">
+              <span class="team-avatar team-avatar--amber" aria-hidden="true">陳</span>
+              <span class="team-loc">📍 廈門</span>
+            </div>
+            <h3 class="team-card__name">陳棟華</h3>
+            <p class="team-card__role">資深天體搜尋家</p>
+          </article>
+
+          <article class="glass-panel team-card team-card--lead">
+            <div class="team-card__top">
+              <span class="team-avatar team-avatar--violet" aria-hidden="true">邱</span>
+              <span class="team-loc">📍 嘉義</span>
+            </div>
+            <h3 class="team-card__name">邱榮輝</h3>
+            <p class="team-card__role">嘉義市天文協會理事長/網頁製作與資訊整理</p>
           </article>
         </div>
       </div>
