@@ -1,6 +1,6 @@
 /**
- * 嘉義市天文協會-麗江雙子天文台天體搜尋計劃 14 顆小行星成果資料集與 CSV/TSV 匯入解析器
- * - 精確觀測日（UT）讀取自專案目錄內的 asteroids_dates.csv.txt
+ * 嘉義市天文協會-麗江雙子天文台天體搜尋計劃 17 顆小行星成果資料集與 CSV/TSV 匯入解析器
+ * - 精確觀測日（UT）整合自 asteroids_dates.csv.txt 與 NASA JPL SBDB 官方資料庫
  * - 軌道根數（Orbital Elements）取自 NASA JPL SBDB / IAU MPC 官方資料庫
  */
 (function (global) {
@@ -331,6 +331,63 @@
         q: 1.6842851,
         ad: 2.4156515,
         periodDays: 1072.06,
+        moid: null
+      }
+    },
+    {
+      id: 15,
+      type: 'MBA',
+      packed: 'K26V40G',
+      standard: '2026 VG40',
+      halfMonthRange: '2026-11-01 ～ 11-15',
+      firstObsUT: '',
+      latestObsUT: '',
+      note: '新發布天體：精確觀測日與軌道根數待 MPC / NASA JPL SBDB 公開資料庫同步更新，可點擊下方官方查詢即時檢視。',
+      orbit: null
+    },
+    {
+      id: 16,
+      type: 'MBA',
+      packed: 'K26V42G',
+      standard: '2026 VG42',
+      halfMonthRange: '2026-11-01 ～ 11-15',
+      firstObsUT: '2026/11/4',
+      latestObsUT: '2026/11/17',
+      orbit: {
+        epoch: '2026-06-09.0',
+        epochJd: 2461200.5,
+        a: 2.9994204,
+        e: 0.1223622,
+        incl: 10.11418,
+        node: 221.2413,
+        peri: 126.53349,
+        m: 14.85,
+        q: 2.6324047,
+        ad: 3.3664361,
+        periodDays: 1897.381,
+        moid: null
+      }
+    },
+    {
+      id: 17,
+      type: 'MBA',
+      packed: 'K26V42N',
+      standard: '2026 VN42',
+      halfMonthRange: '2026-11-01 ～ 11-15',
+      firstObsUT: '2026/11/6',
+      latestObsUT: '2026/11/18',
+      orbit: {
+        epoch: '2026-06-09.0',
+        epochJd: 2461200.5,
+        a: 2.2747522,
+        e: 0.1983632,
+        incl: 1.53413,
+        node: 37.49905,
+        peri: 327.73579,
+        m: 343.01545,
+        q: 1.8235251,
+        ad: 2.7259793,
+        periodDays: 1253.14,
         moid: null
       }
     }

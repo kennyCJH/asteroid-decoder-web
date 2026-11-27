@@ -327,7 +327,7 @@
   }
 
   /* ========================================================================
-     模組 2：14 顆小行星成果儀表板
+     模組 2：天體搜尋計劃小行星成果儀表板
      ======================================================================== */
   function updateKpis() {
     const list = state.asteroids;
@@ -348,6 +348,14 @@
     els.countPha.textContent = phaCount;
     els.countApollo.textContent = apolloCount;
     els.navDataStatus.textContent = `${total} 顆發現 · UT 同步`;
+
+    // 同步頁面其餘總數標示（包含匯入新增小行星時自動更新）
+    ['heroDescCount', 'heroBrowseCount', 'heroRadarCount', 'dashboardTitleCount'].forEach((id) => {
+      const node = document.getElementById(id);
+      if (node) node.textContent = total;
+    });
+    const sortOpt = document.getElementById('sortIdOption');
+    if (sortOpt) sortOpt.textContent = `依項次（1 → ${total}）`;
   }
 
   function getFilteredAndSorted() {
@@ -412,7 +420,10 @@
              <span>e <b>${a.orbit.e.toFixed(3)}</b></span>
              <span>i <b>${a.orbit.incl.toFixed(1)}°</b></span>
            </div>`
-        : '';
+        : `<div class="asteroid-card__orbit-strip asteroid-card__orbit-strip--pending">
+             <span>軌道根數待 MPC / JPL 公開資料庫同步</span>
+           </div>`;
+      const quicklinksClass = a.mpcOrbitUrl ? 'asteroid-card__quicklinks' : 'asteroid-card__quicklinks asteroid-card__quicklinks--two';
 
       return `
         <article class="asteroid-card ${cardTone}" role="button" tabindex="0" data-open-id="${a.id}" aria-label="檢視 ${escapeHtml(a.standard)} 動態軌道與詳細資料">
@@ -435,15 +446,15 @@
           <div class="asteroid-card__meta">
             <div>
               <span class="meta-cell__k">首次觀測日 (UT)</span>
-              <span class="meta-cell__v mono">${escapeHtml(a.firstObsISO || '未提供')}</span>
+              <span class="meta-cell__v mono">${escapeHtml(a.firstObsISO || '待同步')}</span>
             </div>
             <div>
               <span class="meta-cell__k">最新觀測日 (UT)</span>
-              <span class="meta-cell__v mono">${escapeHtml(a.latestObsISO || '未提供')}</span>
+              <span class="meta-cell__v mono">${escapeHtml(a.latestObsISO || '待同步')}</span>
             </div>
           </div>
 
-          <div class="asteroid-card__quicklinks">
+          <div class="${quicklinksClass}">
             <a href="${escapeHtml(mpcUrl)}" target="_blank" rel="noopener noreferrer" class="quick-ext quick-ext--mpc" title="前往 MPC 查詢 ${escapeHtml(a.standard)}：${escapeHtml(mpcUrl)}">MPC 查詢 ↗</a>
             <a href="${escapeHtml(jplUrl)}" target="_blank" rel="noopener noreferrer" class="quick-ext quick-ext--jpl" title="前往 NASA JPL SBDB 查詢 ${escapeHtml(a.standard)}：${escapeHtml(jplUrl)}">JPL SBDB ↗</a>
             ${orbitBtn}
@@ -451,7 +462,7 @@
 
           <div class="asteroid-card__foot">
             <span class="mono">${escapeHtml(a.halfMonthRange)} · 弧長 ${arcText}</span>
-            <span class="card-cta">3D 軌道與詳情 →</span>
+            <span class="card-cta">${a.orbit ? '3D 軌道與詳情 →' : '編號詳情 →'}</span>
           </div>
         </article>
       `;
@@ -520,7 +531,15 @@
 
   function buildOrbitSectionHtml(asteroid) {
     const o = asteroid.orbit;
-    if (!o) return '';
+    if (!o) {
+      return `
+        <div class="modal-section-title">互動式動態軌道圖（等待公開軌道根數）</div>
+        <div class="orbit-pending-box">
+          <strong>${escapeHtml(asteroid.standard)} 的軌道根數尚未同步至公開資料庫</strong>
+          <p>待 IAU MPC 或 NASA JPL SBDB 正式發布本天體軌道根數（a, e, i, Ω, ω, M）後，即可在此呈現 3D 動態軌道模擬與 MPC 互動式軌道草圖；您可先透過下方按鈕直接查詢最新發布狀態。</p>
+        </div>
+      `;
+    }
 
     const periodYears = (o.periodDays / 365.256).toFixed(2);
     const moidHtml = o.moid !== null && o.moid !== undefined

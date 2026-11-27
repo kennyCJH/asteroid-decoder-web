@@ -1562,10 +1562,21 @@ body {
   font-weight: 700;
 }
 
+.asteroid-card__orbit-strip--pending {
+  background: rgba(148, 163, 200, 0.08);
+  border-color: rgba(148, 163, 200, 0.2);
+  color: var(--text-muted);
+  justify-content: center;
+}
+
 .asteroid-card__quicklinks {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 6px;
+}
+
+.asteroid-card__quicklinks--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .quick-ext {
@@ -2627,6 +2638,25 @@ body {
 
 .orbit-stat--alert strong {
   color: #fecdd3;
+}
+
+.orbit-pending-box {
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: rgba(5, 10, 26, 0.68);
+  border: 1px dashed rgba(148, 163, 200, 0.34);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.orbit-pending-box strong {
+  display: block;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.orbit-pending-box p {
+  margin: 0;
 }
 
 /* ==========================================================================
